@@ -125,6 +125,16 @@ final class ThemeStoreTests: XCTestCase {
         XCTAssertFalse(imported.isBuiltIn)
     }
 
+    func testOversizedZIPIsRejectedBeforeArchiveProcessing() throws {
+        let archiveURL = storageDirectory.appendingPathComponent("oversized.zip")
+        let oversizedData = Data(repeating: 0, count: ThemeTransferService.maximumArchiveBytes + 1)
+        try oversizedData.write(to: archiveURL, options: .atomic)
+
+        XCTAssertThrowsError(try ThemeTransferService.importTheme(from: archiveURL)) { error in
+            XCTAssertEqual(error as? ThemeTransferError, .packageTooLarge)
+        }
+    }
+
     private func makeStore() -> ThemeStore {
         ThemeStore(storageDirectory: storageDirectory)
     }

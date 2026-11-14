@@ -134,3 +134,78 @@
 "Share layout file" = "مشاركة ملف التخطيط";
 "OK" = "حسنًا";
 "Cancel" = "إلغاء";
+
+/* التكاملات الموثقة */
+"Safe integration boundary" = "حدود التكامل الآمنة";
+"GG Customizer never downloads or executes exploits, jailbreak payloads, kernels, privilege-escalation chains, or tools that access protected system files. Imported manifests are documentation metadata only." = "لا ينزّل GG Customizer أو ينفّذ ثغرات أو حمولات جيلبريك أو نوى أو سلاسل رفع الصلاحيات أو أدوات تصل إلى ملفات النظام المحمية. ملفات التعريف المستوردة هي بيانات توثيقية فقط.";
+"Official & app-scoped" = "رسمي وضمن نطاق التطبيق";
+"Security compatibility" = "التوافق الأمني";
+"For any external project, verify its upstream repository, release notes, device/version support, license, and source review yourself. A published advisory is not proof that it is safe or compatible with this device." = "تحقّق بنفسك من المستودع الأصلي وملاحظات الإصدار ودعم الجهاز والإصدار والترخيص ومراجعة المصدر لأي مشروع خارجي. نشر تنبيه أمني ليس دليلاً على أمانه أو توافقه مع هذا الجهاز.";
+"External tools — not integrated" = "أدوات خارجية — غير متكاملة";
+"Reviewed manifest metadata" = "بيانات ملفات التعريف المراجَعة";
+"Import verified integration manifest" = "استيراد ملف تعريف تكامل موثّق";
+"Accepted manifests can describe only local import/export, share, and documentation links. They cannot enable a system modification or run external code." = "يمكن لملفات التعريف المقبولة وصف الاستيراد والتصدير المحليين والمشاركة وروابط التوثيق فقط. ولا يمكنها تفعيل تعديل للنظام أو تشغيل كود خارجي.";
+"No third-party manifests have been imported." = "لم يتم استيراد أي ملفات تعريف من جهات خارجية.";
+"Verified Integrations" = "التكاملات الموثقة";
+"Remove this manifest?" = "إزالة ملف التعريف هذا؟";
+"Remove" = "إزالة";
+"Integration review" = "مراجعة التكامل";
+"Open documentation" = "فتح التوثيق";
+"Review only; no execution path in GG" = "للمراجعة فقط؛ لا يوجد مسار تنفيذ في GG";
+"Open upstream repository" = "فتح المستودع الأصلي";
+
+/* نقل الثيمات */
+"Portable, not system-level" = "قابل للنقل، وليس على مستوى النظام";
+"A GG package contains theme metadata only. It cannot include an Apple ID, device passcode, installed-app icons, system files, or a system-wide theme." = "تحتوي حزمة GG على بيانات الثيم فقط. ولا يمكن أن تشمل Apple ID أو رمز مرور الجهاز أو أيقونات التطبيقات المثبتة أو ملفات النظام أو ثيمًا على مستوى النظام.";
+"Create compact local packages for AirDrop, Files, or any standard iOS share destination. No account or server is required." = "أنشئ حزمًا محلية صغيرة لـ AirDrop أو الملفات أو أي وجهة مشاركة قياسية في iOS. لا يلزم حساب أو خادم.";
+"Imported themes are marked as user-created and are checked before being saved. Invalid or future-format packages are rejected without changing your current theme." = "يتم وسم الثيمات المستوردة بأنها من إنشاء المستخدم وفحصها قبل حفظها. تُرفض الحزم غير الصالحة أو ذات التنسيق المستقبلي من دون تغيير الثيم الحالي.";
+
+/* الاستعادة */
+"Recovery Center" = "مركز الاستعادة";
+"These controls restore only GG designs, settings, and local backups. Photos, passcodes, installed apps, wallpapers, and iOS system files are never changed." = "تستعيد هذه العناصر تصاميم GG وإعداداته ونسخه المحلية فقط. لا يتم تغيير الصور أو رموز المرور أو التطبيقات المثبتة أو الخلفيات أو ملفات نظام iOS.";
+"Restore this GG backup?" = "استعادة نسخة GG الاحتياطية هذه؟";
+"Restore backup" = "استعادة النسخة الاحتياطية";
+"This replaces the current GG Customizer state. A safety snapshot is created first when Auto Backup is enabled." = "سيؤدي ذلك إلى استبدال حالة GG Customizer الحالية. تُنشأ لقطة أمان أولًا عند تفعيل النسخ الاحتياطي التلقائي.";
+"Reset All Customizations?" = "إعادة ضبط كل التخصيصات؟";
+"Reset GG Customizer" = "إعادة ضبط GG Customizer";
+"A safety backup will be kept locally. Only GG Customizer designs, settings, and temporary exports are reset." = "سيتم الاحتفاظ بنسخة أمان محليًا. لا تتم إعادة ضبط سوى تصاميم وإعدادات GG Customizer وملفات التصدير المؤقتة.";
+"A reversible safety net for the designs and preferences managed by GG Customizer." = "شبكة أمان قابلة للتراجع للتصاميم والتفضيلات التي يديرها GG Customizer.";
+"Undo the last GG change or return to the most recent working backup." = "تراجع عن آخر تغيير في GG أو ارجع إلى أحدث نسخة احتياطية عاملة.";
+"Backups are local by default; sharing is always an explicit action." = "النسخ الاحتياطية محلية افتراضيًا؛ والمشاركة إجراء صريح دائمًا.";
+"Share Recovery Backup" = "مشاركة نسخة الاستعادة";
+"Checks the local GG theme catalog for recoverable consistency issues." = "يفحص كتالوج ثيمات GG المحلي بحثًا عن مشاكل اتساق قابلة للاستعادة.";
+"The most recent 30 GG backups are retained on this device." = "يتم الاحتفاظ بآخر 30 نسخة احتياطية من GG على هذا الجهاز.";
+"No backup has been created yet. Create one before experimenting with designs." = "لم تُنشأ نسخة احتياطية بعد. أنشئ واحدة قبل تجربة التصاميم.";
+"A local, reversible record of GG changes." = "سجل محلي قابل للتراجع عن تغييرات GG.";
+"Your GG changes will appear here." = "ستظهر تغييرات GG هنا.";
+"Returns GG Customizer to its built-in catalog with a safety backup." = "يعيد GG Customizer إلى كتالوجه المدمج مع إنشاء نسخة أمان.";
+"This does not delete Photos, files outside GG Customizer, installed apps, system themes, or device settings." = "لا يحذف هذا الصور أو الملفات خارج GG Customizer أو التطبيقات المثبتة أو ثيمات النظام أو إعدادات الجهاز.";
+"Completed" = "مكتمل";
+"Protected" = "محمي";
+"Done" = "تم";
+
+/* محرر مفهوم رمز المرور */
+"A visual editor — no device passcode access" = "محرر مرئي — بلا وصول إلى رمز مرور الجهاز";
+"Apple does not permit apps to read, request, store, or redesign the iPhone lock-screen passcode keypad. This studio creates a visual concept only." = "لا تسمح Apple للتطبيقات بقراءة لوحة رمز مرور شاشة قفل الآيفون أو طلبها أو حفظها أو إعادة تصميمها. ينشئ هذا الاستوديو مفهومًا مرئيًا فقط.";
+"Passcode design preview" = "معاينة تصميم رمز المرور";
+"Choose a style for the preview" = "اختر نمطًا للمعاينة";
+"Passcode material" = "خامة رمز المرور";
+"3D depth" = "عمق ثلاثي الأبعاد";
+"Touch reaction" = "استجابة اللمس";
+"Visual only" = "مرئي فقط";
+"Ready-made directions" = "اتجاهات جاهزة";
+"Save & share concept" = "حفظ ومشاركة المفهوم";
+"Only visual settings are saved; no device passcode is ever requested, read, or stored." = "يتم حفظ الإعدادات المرئية فقط؛ ولا يُطلب رمز مرور الجهاز أو يُقرأ أو يُخزّن مطلقًا.";
+"Design name" = "اسم التصميم";
+"Save local passcode concept" = "حفظ مفهوم رمز المرور محليًا";
+"Prepare design file" = "تجهيز ملف التصميم";
+"Import concept" = "استيراد مفهوم";
+"Share .ggpasscode file" = "مشاركة ملف .ggpasscode";
+"Saved concepts" = "المفاهيم المحفوظة";
+"Royal Gold" = "الذهب الملكي";
+"Silver Chrome" = "الكروم الفضي";
+"Liquid Glass" = "الزجاج السائل";
+"Neon Violet" = "البنفسجي النيون";
+"Polished" = "مصقول";
+"Fluid" = "سائل";
+"Luminous" = "متوهج";

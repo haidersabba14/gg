@@ -135,3 +135,78 @@
 "Share layout file" = "Share layout file";
 "OK" = "OK";
 "Cancel" = "Cancel";
+
+/* Compatibility and verified integrations */
+"Safe integration boundary" = "Safe integration boundary";
+"GG Customizer never downloads or executes exploits, jailbreak payloads, kernels, privilege-escalation chains, or tools that access protected system files. Imported manifests are documentation metadata only." = "GG Customizer never downloads or executes exploits, jailbreak payloads, kernels, privilege-escalation chains, or tools that access protected system files. Imported manifests are documentation metadata only.";
+"Official & app-scoped" = "Official & app-scoped";
+"Security compatibility" = "Security compatibility";
+"For any external project, verify its upstream repository, release notes, device/version support, license, and source review yourself. A published advisory is not proof that it is safe or compatible with this device." = "For any external project, verify its upstream repository, release notes, device/version support, license, and source review yourself. A published advisory is not proof that it is safe or compatible with this device.";
+"External tools — not integrated" = "External tools — not integrated";
+"Reviewed manifest metadata" = "Reviewed manifest metadata";
+"Import verified integration manifest" = "Import verified integration manifest";
+"Accepted manifests can describe only local import/export, share, and documentation links. They cannot enable a system modification or run external code." = "Accepted manifests can describe only local import/export, share, and documentation links. They cannot enable a system modification or run external code.";
+"No third-party manifests have been imported." = "No third-party manifests have been imported.";
+"Verified Integrations" = "Verified Integrations";
+"Remove this manifest?" = "Remove this manifest?";
+"Remove" = "Remove";
+"Integration review" = "Integration review";
+"Open documentation" = "Open documentation";
+"Review only; no execution path in GG" = "Review only; no execution path in GG";
+"Open upstream repository" = "Open upstream repository";
+
+/* Theme transfer */
+"Portable, not system-level" = "Portable, not system-level";
+"A GG package contains theme metadata only. It cannot include an Apple ID, device passcode, installed-app icons, system files, or a system-wide theme." = "A GG package contains theme metadata only. It cannot include an Apple ID, device passcode, installed-app icons, system files, or a system-wide theme.";
+"Create compact local packages for AirDrop, Files, or any standard iOS share destination. No account or server is required." = "Create compact local packages for AirDrop, Files, or any standard iOS share destination. No account or server is required.";
+"Imported themes are marked as user-created and are checked before being saved. Invalid or future-format packages are rejected without changing your current theme." = "Imported themes are marked as user-created and are checked before being saved. Invalid or future-format packages are rejected without changing your current theme.";
+
+/* Recovery */
+"Recovery Center" = "Recovery Center";
+"These controls restore only GG designs, settings, and local backups. Photos, passcodes, installed apps, wallpapers, and iOS system files are never changed." = "These controls restore only GG designs, settings, and local backups. Photos, passcodes, installed apps, wallpapers, and iOS system files are never changed.";
+"Restore this GG backup?" = "Restore this GG backup?";
+"Restore backup" = "Restore backup";
+"This replaces the current GG Customizer state. A safety snapshot is created first when Auto Backup is enabled." = "This replaces the current GG Customizer state. A safety snapshot is created first when Auto Backup is enabled.";
+"Reset All Customizations?" = "Reset All Customizations?";
+"Reset GG Customizer" = "Reset GG Customizer";
+"A safety backup will be kept locally. Only GG Customizer designs, settings, and temporary exports are reset." = "A safety backup will be kept locally. Only GG Customizer designs, settings, and temporary exports are reset.";
+"A reversible safety net for the designs and preferences managed by GG Customizer." = "A reversible safety net for the designs and preferences managed by GG Customizer.";
+"Undo the last GG change or return to the most recent working backup." = "Undo the last GG change or return to the most recent working backup.";
+"Backups are local by default; sharing is always an explicit action." = "Backups are local by default; sharing is always an explicit action.";
+"Share Recovery Backup" = "Share Recovery Backup";
+"Checks the local GG theme catalog for recoverable consistency issues." = "Checks the local GG theme catalog for recoverable consistency issues.";
+"The most recent 30 GG backups are retained on this device." = "The most recent 30 GG backups are retained on this device.";
+"No backup has been created yet. Create one before experimenting with designs." = "No backup has been created yet. Create one before experimenting with designs.";
+"A local, reversible record of GG changes." = "A local, reversible record of GG changes.";
+"Your GG changes will appear here." = "Your GG changes will appear here.";
+"Returns GG Customizer to its built-in catalog with a safety backup." = "Returns GG Customizer to its built-in catalog with a safety backup.";
+"This does not delete Photos, files outside GG Customizer, installed apps, system themes, or device settings." = "This does not delete Photos, files outside GG Customizer, installed apps, system themes, or device settings.";
+"Completed" = "Completed";
+"Protected" = "Protected";
+"Done" = "Done";
+
+/* Passcode visual concept editor */
+"A visual editor — no device passcode access" = "A visual editor — no device passcode access";
+"Apple does not permit apps to read, request, store, or redesign the iPhone lock-screen passcode keypad. This studio creates a visual concept only." = "Apple does not permit apps to read, request, store, or redesign the iPhone lock-screen passcode keypad. This studio creates a visual concept only.";
+"Passcode design preview" = "Passcode design preview";
+"Choose a style for the preview" = "Choose a style for the preview";
+"Passcode material" = "Passcode material";
+"3D depth" = "3D depth";
+"Touch reaction" = "Touch reaction";
+"Visual only" = "Visual only";
+"Ready-made directions" = "Ready-made directions";
+"Save & share concept" = "Save & share concept";
+"Only visual settings are saved; no device passcode is ever requested, read, or stored." = "Only visual settings are saved; no device passcode is ever requested, read, or stored.";
+"Design name" = "Design name";
+"Save local passcode concept" = "Save local passcode concept";
+"Prepare design file" = "Prepare design file";
+"Import concept" = "Import concept";
+"Share .ggpasscode file" = "Share .ggpasscode file";
+"Saved concepts" = "Saved concepts";
+"Royal Gold" = "Royal Gold";
+"Silver Chrome" = "Silver Chrome";
+"Liquid Glass" = "Liquid Glass";
+"Neon Violet" = "Neon Violet";
+"Polished" = "Polished";
+"Fluid" = "Fluid";
+"Luminous" = "Luminous";

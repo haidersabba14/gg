@@ -37,6 +37,8 @@ jobs:
           -destination 'platform=iOS Simulator,name=iPhone 16 Pro,OS=latest,arch=arm64'
           clean test
           CODE_SIGNING_ALLOWED=NO
+          ARCHS=arm64
+          ONLY_ACTIVE_ARCH=YES
 
       - name: Verify release simulator build without signing
         run: >-
@@ -48,3 +50,5 @@ jobs:
           -destination 'platform=iOS Simulator,name=iPhone 16 Pro,OS=latest,arch=arm64'
           clean build
           CODE_SIGNING_ALLOWED=NO
+          ARCHS=arm64
+          ONLY_ACTIVE_ARCH=YES

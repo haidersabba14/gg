@@ -24,10 +24,19 @@ the required GitHub Actions Secrets:
 
 - `BUILD_CERTIFICATE_BASE64`
 - `P12_PASSWORD`
-- `PROVISIONING_PROFILE_BASE64`
+- `PROVISIONING_PROFILES_ZIP_BASE64` (recommended: a Base64 ZIP containing
+  the `.mobileprovision` files for the app and every extension), **or**
+  `PROVISIONING_PROFILE_BASE64` when one valid profile truly covers every
+  signed target
 - `KEYCHAIN_PASSWORD`
 - `TEAM_ID`
 - `EXPORT_OPTIONS_PLIST_BASE64`
+
+The profile set and `ExportOptions.plist` must cover
+`com.haidersabba14.ggcustomizer`, `.widgets`, `.activity`, and `.control`, plus
+their shared App Group entitlement. The workflow gives a profile ZIP priority
+when both profile secrets are present. This prevents a misleading “successful”
+archive that later cannot export its extensions.
 
 Encode files locally only for secret entry, for example:
 
@@ -39,10 +48,12 @@ base64 -i ExportOptions.plist | pbcopy
 
 Never commit these values, certificates, profiles, private keys, or Apple
 passwords. After setting the secrets, open **Actions → Signed IPA → Run
-workflow**, download the generated artifact, and distribute it only through an
-Apple-approved route appropriate for the selected export method (development,
-ad hoc, TestFlight, or App Store). The workflow does not use signing-bypass or
-jailbreak tooling.
+workflow**. Leave **Publish release** enabled and enter the intended release tag
+(for example, `v1.0.0`) to attach a successfully exported IPA to that GitHub
+Release; the same IPA is also retained as a private Actions artifact for 14
+days. Distribute it only through an Apple-approved route appropriate for the
+selected export method (development, ad hoc, TestFlight, or App Store). The
+workflow does not use signing-bypass or jailbreak tooling.
 
 ### 3. Apply exported customizations
 
@@ -76,16 +87,25 @@ Secrets التالية:
 
 - `BUILD_CERTIFICATE_BASE64`
 - `P12_PASSWORD`
-- `PROVISIONING_PROFILE_BASE64`
+- `PROVISIONING_PROFILES_ZIP_BASE64` (المفضّل: ملف ZIP مرمّز Base64 يحوي ملفات
+  `.mobileprovision` للتطبيق ولكل extension)، **أو**
+  `PROVISIONING_PROFILE_BASE64` إذا كان ملف واحد صالحًا يغطي كل targets الموقعة
 - `KEYCHAIN_PASSWORD`
 - `TEAM_ID`
 - `EXPORT_OPTIONS_PLIST_BASE64`
 
+يجب أن تغطي مجموعة ملفات التعريف و`ExportOptions.plist` المعرفات
+`com.haidersabba14.ggcustomizer` و`.widgets` و`.activity` و`.control`، مع
+صلاحية App Group المشتركة. يفضّل workflow ملف ZIP عند وجود السرين معًا، لتفادي
+أرشفة تبدو ناجحة ثم تفشل عند تصدير extensions.
+
 حوّل الملفات إلى Base64 محليًا عند إدخالها في Secrets فقط، ولا ترفعها أو كلمات
 المرور أو المفاتيح الخاصة إلى Git. بعد إعدادها، افتح **Actions → Signed IPA →
-Run workflow**، ثم نزّل artifact الناتج ووزعه فقط عبر طريقة Apple المعتمدة
-المناسبة لطريقة التصدير المختارة (development أو ad hoc أو TestFlight أو App
-Store). لا يستخدم workflow أي jailbreak أو تجاوز للتوقيع.
+Run workflow**. اترك **Publish release** مفعّلًا واكتب وسم الإصدار المقصود
+(مثل `v1.0.0`) ليرفق workflow ملف IPA الناتج بنجاح مع GitHub Release نفسه؛
+ويُحتفَظ بالملف أيضًا كـ Actions artifact خاص لمدة 14 يومًا. وزّعه فقط عبر
+طريقة Apple المعتمدة لطريقة التصدير المختارة (development أو ad hoc أو
+TestFlight أو App Store). لا يستخدم workflow أي jailbreak أو تجاوز للتوقيع.
 
 ### ٣. تطبيق التخصيصات المصدرة
 

@@ -98,6 +98,10 @@ enum ThemeTransferService {
     static let themeFileExtension = "ggtheme"
     static let recoveryFileExtension = "ggrecovery"
     static let maximumDocumentBytes = 1_048_576 // 1 MiB: theme settings should be compact JSON.
+    // A ZIP can be smaller than its extracted JSON, but there is no reason for a
+    // one-document GG theme archive to be large. Bound the archive before handing
+    // it to the ZIP reader to avoid spending resources on oversized input.
+    static let maximumArchiveBytes = 2_097_152 // 2 MiB
 
     // MARK: Theme packages
 
@@ -210,6 +214,11 @@ enum ThemeTransferService {
             return try Data(contentsOf: sourceURL)
         }
 
+        try enforceSizeLimit(
+            at: sourceURL,
+            maximumBytes: maximumArchiveBytes,
+            fileManager: fileManager
+        )
         let archive = try Archive(url: sourceURL, accessMode: .read)
         let candidates = archive.filter { entry in
             let parts = entry.path.split(separator: "/")
@@ -258,9 +267,13 @@ enum ThemeTransferService {
         return (stripped.count == 6 || stripped.count == 8) && stripped.allSatisfy { $0.isHexDigit }
     }
 
-    private static func enforceSizeLimit(at url: URL, fileManager: FileManager = .default) throws {
+    private static func enforceSizeLimit(
+        at url: URL,
+        maximumBytes: Int = maximumDocumentBytes,
+        fileManager: FileManager = .default
+    ) throws {
         let size = try url.resourceValues(forKeys: [.fileSizeKey]).fileSize ?? 0
-        if size > maximumDocumentBytes { throw ThemeTransferError.packageTooLarge }
+        if size > maximumBytes { throw ThemeTransferError.packageTooLarge }
     }
 
     private static func nextExportURL(basename: String, fileExtension: String, fileManager: FileManager) throws -> URL {

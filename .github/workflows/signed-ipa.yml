@@ -9,9 +9,26 @@ on:
         default: Release
         type: choice
         options: [Release]
+      release_tag:
+        description: Git tag/release to receive the IPA (leave empty to skip publishing)
+        required: false
+        default: v1.0.0
+        type: string
+      publish_release:
+        description: Attach the successfully exported IPA to the selected GitHub Release
+        required: true
+        default: true
+        type: boolean
+      prerelease:
+        description: Mark a newly created GitHub Release as a prerelease
+        required: true
+        default: true
+        type: boolean
 
 permissions:
-  contents: read
+  # Required only for the optional release step below. Signing material stays in
+  # encrypted GitHub Secrets and is removed from the ephemeral runner at exit.
+  contents: write
 
 jobs:
   archive:
@@ -22,6 +39,7 @@ jobs:
       BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
       P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
       PROVISIONING_PROFILE_BASE64: ${{ secrets.PROVISIONING_PROFILE_BASE64 }}
+      PROVISIONING_PROFILES_ZIP_BASE64: ${{ secrets.PROVISIONING_PROFILES_ZIP_BASE64 }}
       KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
       TEAM_ID: ${{ secrets.TEAM_ID }}
       EXPORT_OPTIONS_PLIST_BASE64: ${{ secrets.EXPORT_OPTIONS_PLIST_BASE64 }}
@@ -33,7 +51,10 @@ jobs:
         run: |
           test -n "$BUILD_CERTIFICATE_BASE64"
           test -n "$P12_PASSWORD"
-          test -n "$PROVISIONING_PROFILE_BASE64"
+          if [ -z "$PROVISIONING_PROFILE_BASE64" ] && [ -z "$PROVISIONING_PROFILES_ZIP_BASE64" ]; then
+            echo "Provide PROVISIONING_PROFILE_BASE64 or PROVISIONING_PROFILES_ZIP_BASE64." >&2
+            exit 1
+          fi
           test -n "$KEYCHAIN_PASSWORD"
           test -n "$TEAM_ID"
           test -n "$EXPORT_OPTIONS_PLIST_BASE64"
@@ -43,18 +64,31 @@ jobs:
         run: |
           CERTIFICATE_PATH="$RUNNER_TEMP/build_certificate.p12"
           PROFILE_PATH="$RUNNER_TEMP/GGCustomizer.mobileprovision"
+          PROFILES_ARCHIVE_PATH="$RUNNER_TEMP/GGCustomizer-profiles.zip"
+          PROFILES_DIRECTORY="$RUNNER_TEMP/GGCustomizer-profiles"
           KEYCHAIN_PATH="$RUNNER_TEMP/build.keychain-db"
           EXPORT_OPTIONS_PATH="$RUNNER_TEMP/ExportOptions.plist"
           mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
           printf '%s' "$BUILD_CERTIFICATE_BASE64" | base64 --decode > "$CERTIFICATE_PATH"
-          printf '%s' "$PROVISIONING_PROFILE_BASE64" | base64 --decode > "$PROFILE_PATH"
           printf '%s' "$EXPORT_OPTIONS_PLIST_BASE64" | base64 --decode > "$EXPORT_OPTIONS_PATH"
+
+          if [ -n "$PROVISIONING_PROFILES_ZIP_BASE64" ]; then
+            mkdir -p "$PROFILES_DIRECTORY"
+            printf '%s' "$PROVISIONING_PROFILES_ZIP_BASE64" | base64 --decode > "$PROFILES_ARCHIVE_PATH"
+            ditto -x -k "$PROFILES_ARCHIVE_PATH" "$PROFILES_DIRECTORY"
+            find "$PROFILES_DIRECTORY" -type f -name '*.mobileprovision' -exec cp {} "$HOME/Library/MobileDevice/Provisioning Profiles/" \;
+            test -n "$(find "$PROFILES_DIRECTORY" -type f -name '*.mobileprovision' -print -quit)"
+          else
+            printf '%s' "$PROVISIONING_PROFILE_BASE64" | base64 --decode > "$PROFILE_PATH"
+            cp "$PROFILE_PATH" "$HOME/Library/MobileDevice/Provisioning Profiles/"
+          fi
+
           security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
           security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
           security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
           security import "$CERTIFICATE_PATH" -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
+          security set-key-partition-list -S apple-tool:,apple: -s -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
           security list-keychain -d user -s "$KEYCHAIN_PATH"
-          cp "$PROFILE_PATH" "$HOME/Library/MobileDevice/Provisioning Profiles/"
           echo "keychain_path=$KEYCHAIN_PATH" >> "$GITHUB_OUTPUT"
           echo "export_options_path=$EXPORT_OPTIONS_PATH" >> "$GITHUB_OUTPUT"
 
@@ -84,8 +118,35 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
+      - name: Publish signed IPA to GitHub Release
+        if: ${{ inputs.publish_release && inputs.release_tag != '' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ inputs.release_tag }}
+          RELEASE_PRERELEASE: ${{ inputs.prerelease }}
+        run: |
+          IPA_PATH="$(find "$RUNNER_TEMP/export" -maxdepth 1 -type f -name '*.ipa' -print -quit)"
+          test -n "$IPA_PATH"
+
+          if gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release upload "$RELEASE_TAG" "$IPA_PATH#GGCustomizer.ipa" \
+              --repo "$GITHUB_REPOSITORY" --clobber
+          else
+            PRE_RELEASE_FLAG=()
+            if [ "$RELEASE_PRERELEASE" = "true" ]; then
+              PRE_RELEASE_FLAG=(--prerelease)
+            fi
+            gh release create "$RELEASE_TAG" "$IPA_PATH#GGCustomizer.ipa" \
+              --repo "$GITHUB_REPOSITORY" \
+              --target "$GITHUB_SHA" \
+              --title "GG Customizer ${RELEASE_TAG#v}" \
+              --generate-notes \
+              "${PRE_RELEASE_FLAG[@]}"
+          fi
+
       - name: Remove temporary signing material
         if: always()
         run: |
           security delete-keychain "${{ steps.signing.outputs.keychain_path }}" || true
-          rm -f "$RUNNER_TEMP/build_certificate.p12" "$RUNNER_TEMP/GGCustomizer.mobileprovision" "$RUNNER_TEMP/ExportOptions.plist"
+          rm -f "$RUNNER_TEMP/build_certificate.p12" "$RUNNER_TEMP/GGCustomizer.mobileprovision" "$RUNNER_TEMP/GGCustomizer-profiles.zip" "$RUNNER_TEMP/ExportOptions.plist"
+          rm -rf "$RUNNER_TEMP/GGCustomizer-profiles"
