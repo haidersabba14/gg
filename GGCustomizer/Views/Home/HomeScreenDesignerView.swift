@@ -97,22 +97,14 @@ struct HomeScreenDesignerView: View {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 9) {
                         ForEach(Array(draft.pages.enumerated()), id: \.element.id) { index, page in
-                            Button {
-                                selectedPageIndex = index
-                                haptic(.selection)
-                            } label: {
-                                VStack(alignment: .leading, spacing: 2) {
-                                    Text(page.title).lineLimit(1)
-                                    Text("\(page.placements.count) widgets").font(.caption2)
+                            HomePageSelectionButton(
+                                page: page,
+                                isSelected: index == selectedPageIndex,
+                                select: {
+                                    selectedPageIndex = index
+                                    selectionHaptic()
                                 }
-                                .font(.subheadline.weight(.semibold))
-                                .padding(.horizontal, 12)
-                                .padding(.vertical, 10)
-                                .foregroundStyle(index == selectedPageIndex ? RoyalPalette.midnight : .primary)
-                                .background(index == selectedPageIndex ? AnyShapeStyle(RoyalPalette.goldGradient) : AnyShapeStyle(.thinMaterial), in: RoundedRectangle(cornerRadius: 13, style: .continuous))
-                            }
-                            .buttonStyle(.plain)
-                            .accessibilityAddTraits(index == selectedPageIndex ? .isSelected : [])
+                            )
                         }
                     }
                 }
@@ -254,7 +246,7 @@ struct HomeScreenDesignerView: View {
     private func addPage() {
         draft.pages.append(HomeScreenPage(title: "Page \(draft.pages.count + 1)"))
         selectedPageIndex = draft.pages.count - 1
-        haptic(.selection)
+        selectionHaptic()
     }
 
     private func removeSelectedPage() {
@@ -271,7 +263,7 @@ struct HomeScreenDesignerView: View {
         let column = (index * 2) % 4
         let row = (index / 2) * 2
         draft.pages[selectedPageIndex].placements.append(HomeWidgetPlacement(kind: kind, column: column, row: row, width: 2, height: 2))
-        haptic(.selection)
+        selectionHaptic()
     }
 
     private func deleteWidget(_ id: UUID) {
@@ -303,6 +295,35 @@ struct HomeScreenDesignerView: View {
 
     private func haptic(_ type: UINotificationFeedbackGenerator.FeedbackType) {
         HapticService.notification(type, enabled: store.settings.hapticsEnabled)
+    }
+
+    private func selectionHaptic() {
+        HapticService.selection(enabled: store.settings.hapticsEnabled)
+    }
+}
+
+private struct HomePageSelectionButton: View {
+    let page: HomeScreenPage
+    let isSelected: Bool
+    let select: () -> Void
+
+    var body: some View {
+        Button(action: select) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(page.title).lineLimit(1)
+                Text("\(page.placements.count) widgets").font(.caption2)
+            }
+            .font(.subheadline.weight(.semibold))
+            .padding(.horizontal, 12)
+            .padding(.vertical, 10)
+            .foregroundStyle(isSelected ? RoyalPalette.midnight : .primary)
+            .background(
+                isSelected ? RoyalPalette.gold.opacity(0.95) : Color.white.opacity(0.12),
+                in: RoundedRectangle(cornerRadius: 13, style: .continuous)
+            )
+        }
+        .buttonStyle(.plain)
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 }
 
