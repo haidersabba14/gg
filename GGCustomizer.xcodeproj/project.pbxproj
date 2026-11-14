@@ -1,0 +1,121 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		010000000000000000000001 /* GGCustomizerWidgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 020000000000000000000002 /* GGCustomizerWidgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		010000000000000000000002 /* GGCustomizerLiveActivity.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 020000000000000000000003 /* GGCustomizerLiveActivity.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		010000000000000000000003 /* GGCustomizerControlWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 020000000000000000000004 /* GGCustomizerControlWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		030000000000000000000001 = {isa = PBXContainerItemProxy; containerPortal = 040000000000000000000001 /* Project object */; proxyType = 1; remoteGlobalIDString = 050000000000000000000002; remoteInfo = GGCustomizerWidgets; };
+		030000000000000000000002 = {isa = PBXContainerItemProxy; containerPortal = 040000000000000000000001 /* Project object */; proxyType = 1; remoteGlobalIDString = 050000000000000000000003; remoteInfo = GGCustomizerLiveActivity; };
+		030000000000000000000003 = {isa = PBXContainerItemProxy; containerPortal = 040000000000000000000001 /* Project object */; proxyType = 1; remoteGlobalIDString = 050000000000000000000004; remoteInfo = GGCustomizerControlWidget; };
+		030000000000000000000004 = {isa = PBXContainerItemProxy; containerPortal = 040000000000000000000001 /* Project object */; proxyType = 1; remoteGlobalIDString = 050000000000000000000001; remoteInfo = GGCustomizer; };
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		060000000000000000000001 /* Embed Foundation Extensions */ = {isa = PBXCopyFilesBuildPhase; buildActionMask = 2147483647; dstPath = ""; dstSubfolderSpec = 13; files = (010000000000000000000001 /* GGCustomizerWidgets.appex in Embed Foundation Extensions */, 010000000000000000000002 /* GGCustomizerLiveActivity.appex in Embed Foundation Extensions */, 010000000000000000000003 /* GGCustomizerControlWidget.appex in Embed Foundation Extensions */, ); name = "Embed Foundation Extensions"; runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		020000000000000000000001 /* GGCustomizer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GGCustomizer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		020000000000000000000002 /* GGCustomizerWidgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = GGCustomizerWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		020000000000000000000003 /* GGCustomizerLiveActivity.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = GGCustomizerLiveActivity.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		020000000000000000000004 /* GGCustomizerControlWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = GGCustomizerControlWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		020000000000000000000005 /* GGCustomizerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GGCustomizerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		070000000000000000000001 /* App exceptions */ = {isa = PBXFileSystemSynchronizedBuildFileExceptionSet; membershipExceptions = ("Resources/Info.plist", "GGCustomizer.entitlements", ); target = 050000000000000000000001 /* GGCustomizer */; };
+		070000000000000000000002 /* Widget exceptions */ = {isa = PBXFileSystemSynchronizedBuildFileExceptionSet; membershipExceptions = ("Info.plist", "GGCustomizerWidgets.entitlements", ); target = 050000000000000000000002 /* GGCustomizerWidgets */; };
+		070000000000000000000003 /* Activity exceptions */ = {isa = PBXFileSystemSynchronizedBuildFileExceptionSet; membershipExceptions = ("Info.plist", "GGCustomizerLiveActivity.entitlements", ); target = 050000000000000000000003 /* GGCustomizerLiveActivity */; };
+		070000000000000000000004 /* Control exceptions */ = {isa = PBXFileSystemSynchronizedBuildFileExceptionSet; membershipExceptions = ("Info.plist", "GGCustomizerControlWidget.entitlements", ); target = 050000000000000000000004 /* GGCustomizerControlWidget */; };
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		080000000000000000000001 /* GGCustomizer */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (070000000000000000000001 /* App exceptions */, ); explicitFileTypes = {}; explicitFolders = (); path = GGCustomizer; sourceTree = "<group>"; };
+		080000000000000000000002 /* GGCustomizerWidgets */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (070000000000000000000002 /* Widget exceptions */, ); explicitFileTypes = {}; explicitFolders = (); path = GGCustomizerWidgets; sourceTree = "<group>"; };
+		080000000000000000000003 /* GGCustomizerLiveActivity */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (070000000000000000000003 /* Activity exceptions */, ); explicitFileTypes = {}; explicitFolders = (); path = GGCustomizerLiveActivity; sourceTree = "<group>"; };
+		080000000000000000000004 /* GGCustomizerControlWidget */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (070000000000000000000004 /* Control exceptions */, ); explicitFileTypes = {}; explicitFolders = (); path = GGCustomizerControlWidget; sourceTree = "<group>"; };
+		080000000000000000000005 /* GGCustomizerTests */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (); explicitFileTypes = {}; explicitFolders = (); path = GGCustomizerTests; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		090000000000000000000001 /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		090000000000000000000002 /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		090000000000000000000003 /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		090000000000000000000004 /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		090000000000000000000005 /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0A0000000000000000000001 = {isa = PBXGroup; children = (080000000000000000000001 /* GGCustomizer */, 080000000000000000000002 /* GGCustomizerWidgets */, 080000000000000000000003 /* GGCustomizerLiveActivity */, 080000000000000000000004 /* GGCustomizerControlWidget */, 080000000000000000000005 /* GGCustomizerTests */, 0A0000000000000000000002 /* Products */, ); sourceTree = "<group>"; };
+		0A0000000000000000000002 /* Products */ = {isa = PBXGroup; children = (020000000000000000000001 /* GGCustomizer.app */, 020000000000000000000002 /* GGCustomizerWidgets.appex */, 020000000000000000000003 /* GGCustomizerLiveActivity.appex */, 020000000000000000000004 /* GGCustomizerControlWidget.appex */, 020000000000000000000005 /* GGCustomizerTests.xctest */, ); name = Products; sourceTree = "<group>"; };
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		050000000000000000000001 /* GGCustomizer */ = {isa = PBXNativeTarget; buildConfigurationList = 0B0000000000000000000001 /* Build configuration list for PBXNativeTarget "GGCustomizer" */; buildPhases = (0C0000000000000000000001 /* Sources */, 090000000000000000000001 /* Frameworks */, 0D0000000000000000000001 /* Resources */, 060000000000000000000001 /* Embed Foundation Extensions */, ); buildRules = (); dependencies = (0E0000000000000000000001 /* PBXTargetDependency */, 0E0000000000000000000002 /* PBXTargetDependency */, 0E0000000000000000000003 /* PBXTargetDependency */, ); fileSystemSynchronizedGroups = (080000000000000000000001 /* GGCustomizer */, ); name = GGCustomizer; packageProductDependencies = (); productName = GGCustomizer; productReference = 020000000000000000000001 /* GGCustomizer.app */; productType = "com.apple.product-type.application"; };
+		050000000000000000000002 /* GGCustomizerWidgets */ = {isa = PBXNativeTarget; buildConfigurationList = 0B0000000000000000000002 /* Build configuration list for PBXNativeTarget "GGCustomizerWidgets" */; buildPhases = (0C0000000000000000000002 /* Sources */, 090000000000000000000002 /* Frameworks */, 0D0000000000000000000002 /* Resources */, ); buildRules = (); dependencies = (); fileSystemSynchronizedGroups = (080000000000000000000002 /* GGCustomizerWidgets */, ); name = GGCustomizerWidgets; packageProductDependencies = (); productName = GGCustomizerWidgets; productReference = 020000000000000000000002 /* GGCustomizerWidgets.appex */; productType = "com.apple.product-type.app-extension"; };
+		050000000000000000000003 /* GGCustomizerLiveActivity */ = {isa = PBXNativeTarget; buildConfigurationList = 0B0000000000000000000003 /* Build configuration list for PBXNativeTarget "GGCustomizerLiveActivity" */; buildPhases = (0C0000000000000000000003 /* Sources */, 090000000000000000000003 /* Frameworks */, 0D0000000000000000000003 /* Resources */, ); buildRules = (); dependencies = (); fileSystemSynchronizedGroups = (080000000000000000000003 /* GGCustomizerLiveActivity */, ); name = GGCustomizerLiveActivity; packageProductDependencies = (); productName = GGCustomizerLiveActivity; productReference = 020000000000000000000003 /* GGCustomizerLiveActivity.appex */; productType = "com.apple.product-type.app-extension"; };
+		050000000000000000000004 /* GGCustomizerControlWidget */ = {isa = PBXNativeTarget; buildConfigurationList = 0B0000000000000000000004 /* Build configuration list for PBXNativeTarget "GGCustomizerControlWidget" */; buildPhases = (0C0000000000000000000004 /* Sources */, 090000000000000000000004 /* Frameworks */, 0D0000000000000000000004 /* Resources */, ); buildRules = (); dependencies = (); fileSystemSynchronizedGroups = (080000000000000000000004 /* GGCustomizerControlWidget */, ); name = GGCustomizerControlWidget; packageProductDependencies = (); productName = GGCustomizerControlWidget; productReference = 020000000000000000000004 /* GGCustomizerControlWidget.appex */; productType = "com.apple.product-type.app-extension"; };
+		050000000000000000000005 /* GGCustomizerTests */ = {isa = PBXNativeTarget; buildConfigurationList = 0B0000000000000000000005 /* Build configuration list for PBXNativeTarget "GGCustomizerTests" */; buildPhases = (0C0000000000000000000005 /* Sources */, 090000000000000000000005 /* Frameworks */, 0D0000000000000000000005 /* Resources */, ); buildRules = (); dependencies = (0E0000000000000000000004 /* PBXTargetDependency */, ); fileSystemSynchronizedGroups = (080000000000000000000005 /* GGCustomizerTests */, ); name = GGCustomizerTests; packageProductDependencies = (); productName = GGCustomizerTests; productReference = 020000000000000000000005 /* GGCustomizerTests.xctest */; productType = "com.apple.product-type.bundle.unit-test"; };
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		040000000000000000000001 /* Project object */ = {isa = PBXProject; attributes = {BuildIndependentTargetsInParallel = 1; LastSwiftUpdateCheck = 1600; LastUpgradeCheck = 1600; TargetAttributes = {050000000000000000000001 = {CreatedOnToolsVersion = 16.0;}; 050000000000000000000002 = {CreatedOnToolsVersion = 16.0;}; 050000000000000000000003 = {CreatedOnToolsVersion = 16.0;}; 050000000000000000000004 = {CreatedOnToolsVersion = 16.0;}; 050000000000000000000005 = {CreatedOnToolsVersion = 16.0; TestTargetID = 050000000000000000000001;}; };}; buildConfigurationList = 0B0000000000000000000000 /* Build configuration list for PBXProject "GGCustomizer" */; compatibilityVersion = "Xcode 16.0"; developmentRegion = en; hasScannedForEncodings = 0; knownRegions = (en, ar, Base, ); mainGroup = 0A0000000000000000000001; minimizedProjectReferenceProxies = 1; preferredProjectObjectVersion = 77; productRefGroup = 0A0000000000000000000002 /* Products */; projectDirPath = ""; projectRoot = ""; targets = (050000000000000000000001 /* GGCustomizer */, 050000000000000000000002 /* GGCustomizerWidgets */, 050000000000000000000003 /* GGCustomizerLiveActivity */, 050000000000000000000004 /* GGCustomizerControlWidget */, 050000000000000000000005 /* GGCustomizerTests */, ); };
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		0D0000000000000000000001 /* Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		0D0000000000000000000002 /* Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		0D0000000000000000000003 /* Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		0D0000000000000000000004 /* Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		0D0000000000000000000005 /* Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		0C0000000000000000000001 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		0C0000000000000000000002 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		0C0000000000000000000003 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		0C0000000000000000000004 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		0C0000000000000000000005 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		0E0000000000000000000001 /* PBXTargetDependency */ = {isa = PBXTargetDependency; target = 050000000000000000000002 /* GGCustomizerWidgets */; targetProxy = 030000000000000000000001; };
+		0E0000000000000000000002 /* PBXTargetDependency */ = {isa = PBXTargetDependency; target = 050000000000000000000003 /* GGCustomizerLiveActivity */; targetProxy = 030000000000000000000002; };
+		0E0000000000000000000003 /* PBXTargetDependency */ = {isa = PBXTargetDependency; target = 050000000000000000000004 /* GGCustomizerControlWidget */; targetProxy = 030000000000000000000003; };
+		0E0000000000000000000004 /* PBXTargetDependency */ = {isa = PBXTargetDependency; target = 050000000000000000000001 /* GGCustomizer */; targetProxy = 030000000000000000000004; };
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		0F0000000000000000000001 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = {ALWAYS_SEARCH_USER_PATHS = NO; CLANG_ENABLE_MODULES = YES; CLANG_ENABLE_OBJC_ARC = YES; GCC_C_LANGUAGE_STANDARD = gnu17; SWIFT_VERSION = 5.0; }; name = Debug; };
+		0F0000000000000000000002 /* Release */ = {isa = XCBuildConfiguration; buildSettings = {ALWAYS_SEARCH_USER_PATHS = NO; CLANG_ENABLE_MODULES = YES; CLANG_ENABLE_OBJC_ARC = YES; GCC_C_LANGUAGE_STANDARD = gnu17; SWIFT_COMPILATION_MODE = wholemodule; SWIFT_OPTIMIZATION_LEVEL = "-O"; SWIFT_VERSION = 5.0; }; name = Release; };
+		0F0000000000000000000011 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = {ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon; CODE_SIGN_ENTITLEMENTS = GGCustomizer/GGCustomizer.entitlements; CODE_SIGN_STYLE = Automatic; CURRENT_PROJECT_VERSION = 1; DEVELOPMENT_TEAM = ""; GENERATE_INFOPLIST_FILE = NO; INFOPLIST_FILE = GGCustomizer/Resources/Info.plist; IPHONEOS_DEPLOYMENT_TARGET = 17.0; MARKETING_VERSION = 1.0.0; PRODUCT_BUNDLE_IDENTIFIER = com.haidersabba14.ggcustomizer; PRODUCT_NAME = "$(TARGET_NAME)"; SDKROOT = iphoneos; SWIFT_EMIT_LOC_STRINGS = YES; SWIFT_STRICT_CONCURRENCY = minimal; TARGETED_DEVICE_FAMILY = "1,2"; }; name = Debug; };
+		0F0000000000000000000012 /* Release */ = {isa = XCBuildConfiguration; buildSettings = {ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon; CODE_SIGN_ENTITLEMENTS = GGCustomizer/GGCustomizer.entitlements; CODE_SIGN_STYLE = Automatic; CURRENT_PROJECT_VERSION = 1; DEVELOPMENT_TEAM = ""; GENERATE_INFOPLIST_FILE = NO; INFOPLIST_FILE = GGCustomizer/Resources/Info.plist; IPHONEOS_DEPLOYMENT_TARGET = 17.0; MARKETING_VERSION = 1.0.0; PRODUCT_BUNDLE_IDENTIFIER = com.haidersabba14.ggcustomizer; PRODUCT_NAME = "$(TARGET_NAME)"; SDKROOT = iphoneos; SWIFT_EMIT_LOC_STRINGS = YES; SWIFT_STRICT_CONCURRENCY = minimal; TARGETED_DEVICE_FAMILY = "1,2"; }; name = Release; };
+		0F0000000000000000000021 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = {APPLICATION_EXTENSION_API_ONLY = YES; CODE_SIGN_ENTITLEMENTS = GGCustomizerWidgets/GGCustomizerWidgets.entitlements; CODE_SIGN_STYLE = Automatic; GENERATE_INFOPLIST_FILE = NO; INFOPLIST_FILE = GGCustomizerWidgets/Info.plist; IPHONEOS_DEPLOYMENT_TARGET = 17.0; MARKETING_VERSION = 1.0.0; PRODUCT_BUNDLE_IDENTIFIER = com.haidersabba14.ggcustomizer.widgets; PRODUCT_NAME = "$(TARGET_NAME)"; SDKROOT = iphoneos; SKIP_INSTALL = YES; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2"; }; name = Debug; };
+		0F0000000000000000000022 /* Release */ = {isa = XCBuildConfiguration; buildSettings = {APPLICATION_EXTENSION_API_ONLY = YES; CODE_SIGN_ENTITLEMENTS = GGCustomizerWidgets/GGCustomizerWidgets.entitlements; CODE_SIGN_STYLE = Automatic; GENERATE_INFOPLIST_FILE = NO; INFOPLIST_FILE = GGCustomizerWidgets/Info.plist; IPHONEOS_DEPLOYMENT_TARGET = 17.0; MARKETING_VERSION = 1.0.0; PRODUCT_BUNDLE_IDENTIFIER = com.haidersabba14.ggcustomizer.widgets; PRODUCT_NAME = "$(TARGET_NAME)"; SDKROOT = iphoneos; SKIP_INSTALL = YES; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2"; }; name = Release; };
+		0F0000000000000000000031 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = {APPLICATION_EXTENSION_API_ONLY = YES; CODE_SIGN_ENTITLEMENTS = GGCustomizerLiveActivity/GGCustomizerLiveActivity.entitlements; CODE_SIGN_STYLE = Automatic; GENERATE_INFOPLIST_FILE = NO; INFOPLIST_FILE = GGCustomizerLiveActivity/Info.plist; IPHONEOS_DEPLOYMENT_TARGET = 17.0; MARKETING_VERSION = 1.0.0; PRODUCT_BUNDLE_IDENTIFIER = com.haidersabba14.ggcustomizer.activity; PRODUCT_NAME = "$(TARGET_NAME)"; SDKROOT = iphoneos; SKIP_INSTALL = YES; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2"; }; name = Debug; };
+		0F0000000000000000000032 /* Release */ = {isa = XCBuildConfiguration; buildSettings = {APPLICATION_EXTENSION_API_ONLY = YES; CODE_SIGN_ENTITLEMENTS = GGCustomizerLiveActivity/GGCustomizerLiveActivity.entitlements; CODE_SIGN_STYLE = Automatic; GENERATE_INFOPLIST_FILE = NO; INFOPLIST_FILE = GGCustomizerLiveActivity/Info.plist; IPHONEOS_DEPLOYMENT_TARGET = 17.0; MARKETING_VERSION = 1.0.0; PRODUCT_BUNDLE_IDENTIFIER = com.haidersabba14.ggcustomizer.activity; PRODUCT_NAME = "$(TARGET_NAME)"; SDKROOT = iphoneos; SKIP_INSTALL = YES; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2"; }; name = Release; };
+		0F0000000000000000000041 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = {APPLICATION_EXTENSION_API_ONLY = YES; CODE_SIGN_ENTITLEMENTS = GGCustomizerControlWidget/GGCustomizerControlWidget.entitlements; CODE_SIGN_STYLE = Automatic; GENERATE_INFOPLIST_FILE = NO; INFOPLIST_FILE = GGCustomizerControlWidget/Info.plist; IPHONEOS_DEPLOYMENT_TARGET = 18.0; MARKETING_VERSION = 1.0.0; PRODUCT_BUNDLE_IDENTIFIER = com.haidersabba14.ggcustomizer.control; PRODUCT_NAME = "$(TARGET_NAME)"; SDKROOT = iphoneos; SKIP_INSTALL = YES; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2"; }; name = Debug; };
+		0F0000000000000000000042 /* Release */ = {isa = XCBuildConfiguration; buildSettings = {APPLICATION_EXTENSION_API_ONLY = YES; CODE_SIGN_ENTITLEMENTS = GGCustomizerControlWidget/GGCustomizerControlWidget.entitlements; CODE_SIGN_STYLE = Automatic; GENERATE_INFOPLIST_FILE = NO; INFOPLIST_FILE = GGCustomizerControlWidget/Info.plist; IPHONEOS_DEPLOYMENT_TARGET = 18.0; MARKETING_VERSION = 1.0.0; PRODUCT_BUNDLE_IDENTIFIER = com.haidersabba14.ggcustomizer.control; PRODUCT_NAME = "$(TARGET_NAME)"; SDKROOT = iphoneos; SKIP_INSTALL = YES; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2"; }; name = Release; };
+		0F0000000000000000000051 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = {BUNDLE_LOADER = "$(TEST_HOST)"; CODE_SIGN_STYLE = Automatic; GENERATE_INFOPLIST_FILE = YES; IPHONEOS_DEPLOYMENT_TARGET = 17.0; PRODUCT_BUNDLE_IDENTIFIER = com.haidersabba14.ggcustomizer.tests; PRODUCT_NAME = "$(TARGET_NAME)"; SDKROOT = iphoneos; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2"; TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GGCustomizer.app/GGCustomizer"; }; name = Debug; };
+		0F0000000000000000000052 /* Release */ = {isa = XCBuildConfiguration; buildSettings = {BUNDLE_LOADER = "$(TEST_HOST)"; CODE_SIGN_STYLE = Automatic; GENERATE_INFOPLIST_FILE = YES; IPHONEOS_DEPLOYMENT_TARGET = 17.0; PRODUCT_BUNDLE_IDENTIFIER = com.haidersabba14.ggcustomizer.tests; PRODUCT_NAME = "$(TARGET_NAME)"; SDKROOT = iphoneos; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2"; TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GGCustomizer.app/GGCustomizer"; }; name = Release; };
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0B0000000000000000000000 /* Build configuration list for PBXProject "GGCustomizer" */ = {isa = XCConfigurationList; buildConfigurations = (0F0000000000000000000001 /* Debug */, 0F0000000000000000000002 /* Release */, ); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		0B0000000000000000000001 /* Build configuration list for PBXNativeTarget "GGCustomizer" */ = {isa = XCConfigurationList; buildConfigurations = (0F0000000000000000000011 /* Debug */, 0F0000000000000000000012 /* Release */, ); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		0B0000000000000000000002 /* Build configuration list for PBXNativeTarget "GGCustomizerWidgets" */ = {isa = XCConfigurationList; buildConfigurations = (0F0000000000000000000021 /* Debug */, 0F0000000000000000000022 /* Release */, ); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		0B0000000000000000000003 /* Build configuration list for PBXNativeTarget "GGCustomizerLiveActivity" */ = {isa = XCConfigurationList; buildConfigurations = (0F0000000000000000000031 /* Debug */, 0F0000000000000000000032 /* Release */, ); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		0B0000000000000000000004 /* Build configuration list for PBXNativeTarget "GGCustomizerControlWidget" */ = {isa = XCConfigurationList; buildConfigurations = (0F0000000000000000000041 /* Debug */, 0F0000000000000000000042 /* Release */, ); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		0B0000000000000000000005 /* Build configuration list for PBXNativeTarget "GGCustomizerTests" */ = {isa = XCConfigurationList; buildConfigurations = (0F0000000000000000000051 /* Debug */, 0F0000000000000000000052 /* Release */, ); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+/* End XCConfigurationList section */
+	};
+	rootObject = 040000000000000000000001 /* Project object */;
+}

@@ -1,0 +1,35 @@
+# Xcode
+DerivedData/
+build/
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.xcuserstate
+*.xccheckout
+*.xcscmblueprint
+
+# Swift Package Manager
+.build/
+.swiftpm/
+Packages/
+
+# Fastlane and signing material
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/
+fastlane/test_output/
+*.mobileprovision
+*.p12
+*.cer
+*.pem
+*.key
+
+# App-generated / local configuration files
+Secrets.plist
+Config.xcconfig
+*.ipa
+*.xcarchive
+
+# macOS / editor files
+.DS_Store
+.idea/
+.vscode/
