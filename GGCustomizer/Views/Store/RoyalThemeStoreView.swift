@@ -129,19 +129,14 @@ struct RoyalThemeStoreView: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 9) {
                     ForEach(ThemeStoreFilter.allCases) { option in
-                        Button {
-                            filter = option
-                            feedback(.selection)
-                        } label: {
-                            Label(option.title, systemImage: option.symbol)
-                                .font(.subheadline.weight(.semibold))
-                                .padding(.horizontal, 13)
-                                .padding(.vertical, 9)
-                                .foregroundStyle(filter == option ? RoyalPalette.midnight : .primary)
-                                .background(filter == option ? AnyShapeStyle(RoyalPalette.goldGradient) : AnyShapeStyle(.thinMaterial), in: Capsule())
-                        }
-                        .buttonStyle(.plain)
-                        .accessibilityAddTraits(filter == option ? .isSelected : [])
+                        ThemeFilterButton(
+                            option: option,
+                            isSelected: filter == option,
+                            select: {
+                                filter = option
+                                selectionFeedback()
+                            }
+                        )
                     }
                 }
             }
@@ -156,6 +151,10 @@ struct RoyalThemeStoreView: View {
     private func feedback(_ type: UINotificationFeedbackGenerator.FeedbackType) {
         HapticService.notification(type, enabled: store.settings.hapticsEnabled)
         if type == .success { HapticService.confirmationSound(enabled: store.settings.soundsEnabled) }
+    }
+
+    private func selectionFeedback() {
+        HapticService.selection(enabled: store.settings.hapticsEnabled)
     }
 }
 
@@ -190,6 +189,28 @@ private enum ThemeStoreFilter: String, CaseIterable, Identifiable {
         case .builtIn: return theme.isBuiltIn
         case .local: return !theme.isBuiltIn
         }
+    }
+}
+
+private struct ThemeFilterButton: View {
+    let option: ThemeStoreFilter
+    let isSelected: Bool
+    let select: () -> Void
+
+    var body: some View {
+        Button(action: select) {
+            Label(option.title, systemImage: option.symbol)
+                .font(.subheadline.weight(.semibold))
+                .padding(.horizontal, 13)
+                .padding(.vertical, 9)
+                .foregroundStyle(isSelected ? RoyalPalette.midnight : .primary)
+                .background(
+                    isSelected ? RoyalPalette.gold.opacity(0.95) : Color.white.opacity(0.12),
+                    in: Capsule()
+                )
+        }
+        .buttonStyle(.plain)
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 }
 
