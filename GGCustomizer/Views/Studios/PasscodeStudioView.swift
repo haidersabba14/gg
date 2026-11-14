@@ -1,11 +1,17 @@
 import SwiftUI
+import UniformTypeIdentifiers
 
 /// A design sandbox for a *fictional* keypad. It never asks for, records, or
 /// compares the device passcode. Taps only create a short visual response.
 struct PasscodeStudioView: View {
+    @EnvironmentObject private var store: ThemeStore
     @State private var selectedTheme = PasscodePreviewTheme.royalGold
     @State private var activeKey: Int?
     @State private var tapCount = 0
+    @State private var designName = "Royal Lock Concept"
+    @State private var exportedURL: URL?
+    @State private var isImporting = false
+    @State private var statusMessage: String?
 
     var body: some View {
         ZStack {
@@ -85,12 +91,117 @@ struct PasscodeStudioView: View {
                             .padding(.top, 4)
                         }
                     }
+
+                    savedDesigns
                 }
                 .padding()
             }
         }
         .navigationTitle("Passcode Studio")
         .navigationBarTitleDisplayMode(.inline)
+        .fileImporter(isPresented: $isImporting, allowedContentTypes: [.ggPasscodeDesign, .json], allowsMultipleSelection: false) { result in
+            importDesign(result)
+        }
+        .alert("Passcode Studio", isPresented: Binding(get: { statusMessage != nil }, set: { if !$0 { statusMessage = nil } })) {
+            Button("OK", role: .cancel) { statusMessage = nil }
+        } message: { Text(statusMessage ?? "") }
+    }
+
+    private var savedDesigns: some View {
+        GlassCard {
+            VStack(alignment: .leading, spacing: 13) {
+                RoyalSectionHeader("Save & share concept", subtitle: "Only visual settings are saved; no device passcode is ever requested, read, or stored.")
+                TextField("Design name", text: $designName)
+                    .textFieldStyle(.roundedBorder)
+                Button(action: saveDesign) {
+                    Label("Save local passcode concept", systemImage: "square.and.arrow.down.on.square")
+                }
+                .buttonStyle(RoyalButtonStyle())
+                HStack(spacing: 10) {
+                    Button(action: exportDesign) {
+                        Label("Prepare design file", systemImage: "square.and.arrow.up")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.bordered)
+                    Button { isImporting = true } label: {
+                        Label("Import concept", systemImage: "square.and.arrow.down")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.bordered)
+                }
+                if let exportedURL {
+                    ShareLink(item: exportedURL) {
+                        Label("Share .ggpasscode file", systemImage: "square.and.arrow.up")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(RoyalPalette.amethyst)
+                }
+                if !store.passcodeDesigns.isEmpty {
+                    Divider()
+                    Text("Saved concepts").font(.subheadline.bold())
+                    ForEach(store.passcodeDesigns.suffix(4).reversed()) { design in
+                        Button {
+                            load(design)
+                        } label: {
+                            HStack {
+                                Circle().fill(Color(uiColor: ThemeEngine.color(from: design.digitHex))).frame(width: 14, height: 14)
+                                Text(design.name).foregroundStyle(.primary)
+                                Spacer()
+                                Image(systemName: "arrow.counterclockwise.circle").foregroundStyle(.secondary)
+                            }
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+            }
+        }
+    }
+
+    private var currentDesign: PasscodeDesign {
+        PasscodeDesign(
+            name: designName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "Untitled Passcode Concept" : designName,
+            material: selectedTheme.material,
+            digitHex: selectedTheme.digitHex,
+            backgroundHex: selectedTheme.backgroundHex,
+            glowIntensity: selectedTheme == .neonViolet ? 0.9 : 0.42,
+            depth: selectedTheme == .liquidGlass ? 0.6 : 0.38
+        )
+    }
+
+    private func saveDesign() {
+        let design = currentDesign
+        store.save(passcodeDesign: design)
+        designName = design.name
+        statusMessage = "Saved \(design.name) as a local visual concept."
+        HapticService.notification(.success, enabled: store.settings.hapticsEnabled)
+    }
+
+    private func exportDesign() {
+        do {
+            exportedURL = try PasscodeDesignTransfer.export(currentDesign)
+            statusMessage = "Your visual passcode concept is ready to share."
+        } catch { statusMessage = error.localizedDescription }
+    }
+
+    private func importDesign(_ result: Result<[URL], Error>) {
+        do {
+            guard let url = try result.get().first else { return }
+            let secured = url.startAccessingSecurityScopedResource()
+            defer { if secured { url.stopAccessingSecurityScopedResource() } }
+            let design = try JSONDecoder.ggPasscode.decode(PasscodeDesign.self, from: Data(contentsOf: url))
+            store.save(passcodeDesign: design)
+            load(design)
+            statusMessage = "Imported a local visual concept. It cannot change the iPhone passcode screen."
+        } catch { statusMessage = "Could not import that passcode concept: \(error.localizedDescription)" }
+    }
+
+    private func load(_ design: PasscodeDesign) {
+        selectedTheme = PasscodePreviewTheme(design: design)
+        designName = design.name
+        tapCount = 0
+        activeKey = nil
+        HapticService.selection(enabled: store.settings.hapticsEnabled)
     }
 }
 
@@ -121,6 +232,23 @@ private enum PasscodePreviewTheme: String, CaseIterable, Identifiable {
         case .neonViolet: return "Luminous"
         }
     }
+    var material: PasscodeMaterial {
+        switch self { case .royalGold: return .gold; case .silverChrome: return .chrome; case .liquidGlass: return .liquidGlass; case .neonViolet: return .neon }
+    }
+    var digitHex: String {
+        switch self { case .royalGold: return "#E4B948"; case .silverChrome: return "#F4F6FA"; case .liquidGlass: return "#7DEBFF"; case .neonViolet: return "#D46BFF" }
+    }
+    var backgroundHex: String {
+        switch self { case .royalGold: return "#100C04"; case .silverChrome: return "#12151C"; case .liquidGlass: return "#0A263A"; case .neonViolet: return "#100517" }
+    }
+    init(design: PasscodeDesign) {
+        switch design.material {
+        case .gold: self = .royalGold
+        case .silver, .chrome, .dimensional: self = .silverChrome
+        case .liquidGlass: self = .liquidGlass
+        case .neon: self = .neonViolet
+        }
+    }
     var background: LinearGradient {
         switch self {
         case .royalGold:
@@ -133,6 +261,32 @@ private enum PasscodePreviewTheme: String, CaseIterable, Identifiable {
             return LinearGradient(colors: [.black, .purple.opacity(0.72), .black], startPoint: .top, endPoint: .bottom)
         }
     }
+}
+
+private enum PasscodeDesignTransfer {
+    static func export(_ design: PasscodeDesign) throws -> URL {
+        let directory = GGFileLocations.exportsDirectory()
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        let safeName = design.name.replacingOccurrences(of: "/", with: "-").prefix(60)
+        let url = directory.appendingPathComponent("\(safeName)-\(UUID().uuidString.prefix(6)).ggpasscode")
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+        try encoder.encode(design).write(to: url, options: .atomic)
+        return url
+    }
+}
+
+private extension JSONDecoder {
+    static var ggPasscode: JSONDecoder {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        return decoder
+    }
+}
+
+private extension UTType {
+    static let ggPasscodeDesign = UTType(filenameExtension: "ggpasscode") ?? .json
 }
 
 private struct PasscodePreview: View {

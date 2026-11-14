@@ -1,4 +1,5 @@
 import Foundation
+import ZIPFoundation
 
 /// Portable, app-scoped files used by GG Customizer. These documents never contain a
 /// device passcode, Photos-library content, system settings, certificates, or credentials.
@@ -84,7 +85,7 @@ enum ThemeTransferError: LocalizedError, Equatable {
         case .packageTooLarge:
             return "This package is too large for a local GG theme document."
         case .zipUnavailable:
-            return "ZIP packages require iOS 16 or later. Try importing the .ggtheme file instead."
+            return "ZIP package support is unavailable in this build. Try importing the .ggtheme file instead."
         case .packageMissingFromArchive:
             return "No .ggtheme or .json package was found in this ZIP archive."
         }
@@ -113,27 +114,32 @@ enum ThemeTransferService {
     }
 
     /// Produces a standard ZIP archive containing one portable `.ggtheme` JSON document.
-    /// The system's Foundation ZIP implementation is used; no third-party binary or server
-    /// is involved.
-    @available(iOS 16.0, *)
+    /// ZIPFoundation is an audited MIT-licensed Swift Package; archive work is local and
+    /// no file is uploaded to a service.
     static func exportThemeZIP(_ theme: ThemePackage, fileManager: FileManager = .default) throws -> URL {
-        let staging = fileManager.temporaryDirectory
-            .appendingPathComponent("GGThemeExport-\(UUID().uuidString)", isDirectory: true)
-        defer { try? fileManager.removeItem(at: staging) }
-        try fileManager.createDirectory(at: staging, withIntermediateDirectories: true)
-
-        let documentURL = staging
-            .appendingPathComponent("theme")
-            .appendingPathExtension(themeFileExtension)
-        try makeEncoder().encode(GGThemePackageDocument(theme: theme)).write(to: documentURL, options: .atomic)
-
+        let data = try makeEncoder().encode(GGThemePackageDocument(theme: theme))
         let archiveURL = try nextExportURL(
             basename: sanitizedFilename(theme.name, fallback: "GG-Theme"),
             fileExtension: "zip",
             fileManager: fileManager
         )
-        try fileManager.zipItem(at: staging, to: archiveURL, shouldKeepParent: false, compressionMethod: .deflate)
-        return archiveURL
+        do {
+            let archive = try Archive(url: archiveURL, accessMode: .create)
+            try archive.addEntry(
+                with: "theme.\(themeFileExtension)",
+                type: .file,
+                uncompressedSize: Int64(data.count),
+                compressionMethod: .deflate,
+                provider: { position, size in
+                    let start = Int(position)
+                    return data.subdata(in: start..<min(start + size, data.count))
+                }
+            )
+            return archiveURL
+        } catch {
+            try? fileManager.removeItem(at: archiveURL)
+            throw error
+        }
     }
 
     /// Decodes a direct `.ggtheme`/`.json` file or a ZIP archive containing one.
@@ -142,16 +148,8 @@ enum ThemeTransferService {
         let isSecurityScoped = sourceURL.startAccessingSecurityScopedResource()
         defer { if isSecurityScoped { sourceURL.stopAccessingSecurityScopedResource() } }
 
-        let dataURL = try packageDocumentURL(from: sourceURL, fileManager: fileManager)
-        defer {
-            // ZIP documents are unpacked into a unique temporary directory. Direct source
-            // URLs never live in `GGThemeImport-*`, so this does not affect user files.
-            if let staging = importStagingRoot(containing: dataURL, fileManager: fileManager) {
-                try? fileManager.removeItem(at: staging)
-            }
-        }
-        try enforceSizeLimit(at: dataURL, fileManager: fileManager)
-        let document = try makeDecoder().decode(GGThemePackageDocument.self, from: Data(contentsOf: dataURL))
+        let documentData = try packageDocumentData(from: sourceURL, fileManager: fileManager)
+        let document = try makeDecoder().decode(GGThemePackageDocument.self, from: documentData)
         return try validatedImportedTheme(from: document)
     }
 
@@ -204,50 +202,31 @@ enum ThemeTransferService {
 
     // MARK: Internal validation and files
 
-    private static func packageDocumentURL(from sourceURL: URL, fileManager: FileManager) throws -> URL {
+    private static func packageDocumentData(from sourceURL: URL, fileManager: FileManager) throws -> Data {
         let extensionName = sourceURL.pathExtension.lowercased()
         guard [themeFileExtension, "json", "zip"].contains(extensionName) else { throw ThemeTransferError.unsupportedFile }
-        guard extensionName == "zip" else { return sourceURL }
-        guard #available(iOS 16.0, *) else { throw ThemeTransferError.zipUnavailable }
-
-        let staging = fileManager.temporaryDirectory
-            .appendingPathComponent("GGThemeImport-\(UUID().uuidString)", isDirectory: true)
-        try fileManager.createDirectory(at: staging, withIntermediateDirectories: true)
-        do {
-            try fileManager.unzipItem(at: sourceURL, to: staging)
-            let candidate = try packageCandidate(in: staging, fileManager: fileManager)
-            return candidate
-        } catch {
-            try? fileManager.removeItem(at: staging)
-            throw error
-        }
-    }
-
-    private static func packageCandidate(in directory: URL, fileManager: FileManager) throws -> URL {
-        let rootPath = directory.standardizedFileURL.path
-        let keys: Set<URLResourceKey> = [.isRegularFileKey, .isSymbolicLinkKey, .fileSizeKey]
-        guard let enumerator = fileManager.enumerator(
-            at: directory,
-            includingPropertiesForKeys: Array(keys),
-            options: [.skipsHiddenFiles, .skipsPackageDescendants]
-        ) else {
-            throw ThemeTransferError.packageMissingFromArchive
+        guard extensionName == "zip" else {
+            try enforceSizeLimit(at: sourceURL, fileManager: fileManager)
+            return try Data(contentsOf: sourceURL)
         }
 
-        var candidates: [URL] = []
-        for case let url as URL in enumerator {
-            let standardized = url.standardizedFileURL
-            guard standardized.path.hasPrefix(rootPath + "/") else { continue }
-            let values = try? standardized.resourceValues(forKeys: keys)
-            guard values?.isRegularFile == true, values?.isSymbolicLink != true else { continue }
-            guard [themeFileExtension, "json"].contains(standardized.pathExtension.lowercased()) else { continue }
-            try enforceSizeLimit(at: standardized, fileManager: fileManager)
-            candidates.append(standardized)
+        let archive = try Archive(url: sourceURL, accessMode: .read)
+        let candidates = archive.filter { entry in
+            let parts = entry.path.split(separator: "/")
+            let safePath = !entry.path.hasPrefix("/") && !parts.contains("..")
+            let validExtension = [themeFileExtension, "json"].contains(URL(fileURLWithPath: entry.path).pathExtension.lowercased())
+            return entry.type == .file && safePath && validExtension && entry.uncompressedSize <= UInt64(maximumDocumentBytes)
         }
         guard let candidate = candidates.sorted(by: { $0.path < $1.path }).first else {
             throw ThemeTransferError.packageMissingFromArchive
         }
-        return candidate
+
+        var data = Data()
+        try archive.extract(candidate) { chunk in
+            guard data.count <= maximumDocumentBytes - chunk.count else { throw ThemeTransferError.packageTooLarge }
+            data.append(chunk)
+        }
+        return data
     }
 
     private static func validatedImportedTheme(from document: GGThemePackageDocument) throws -> ThemePackage {
@@ -297,18 +276,6 @@ enum ThemeTransferService {
         return candidate
     }
 
-    private static func importStagingRoot(containing url: URL, fileManager: FileManager) -> URL? {
-        let temporaryRoot = fileManager.temporaryDirectory.standardizedFileURL.path
-        var cursor = url.deletingLastPathComponent().standardizedFileURL
-        while cursor.path.hasPrefix(temporaryRoot) {
-            if cursor.lastPathComponent.hasPrefix("GGThemeImport-") { return cursor }
-            let parent = cursor.deletingLastPathComponent()
-            guard parent.path != cursor.path else { break }
-            cursor = parent
-        }
-        return nil
-    }
-
     private static func sanitizedFilename(_ input: String, fallback: String) -> String {
         let allowed = CharacterSet.alphanumerics.union(CharacterSet(charactersIn: "-_ "))
         let cleaned = input.unicodeScalars.map { allowed.contains($0) ? Character(String($0)) : Character("-") }
@@ -352,7 +319,6 @@ extension ThemeStore {
         return try ThemeTransferService.exportTheme(theme)
     }
 
-    @available(iOS 16.0, *)
     func exportThemeZIP(themeID: UUID) throws -> URL {
         guard let theme = themes.first(where: { $0.id == themeID }) else {
             throw ThemeTransferError.invalidTheme("the selected theme no longer exists")

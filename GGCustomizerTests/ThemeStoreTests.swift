@@ -113,6 +113,18 @@ final class ThemeStoreTests: XCTestCase {
         XCTAssertEqual(statuses[.localBackupRecovery], .supported)
     }
 
+    func testThemeZIPRoundTripStaysInAppScopedPackageFormat() throws {
+        let theme = ThemeEngine.randomTheme()
+        let archiveURL = try ThemeTransferService.exportThemeZIP(theme)
+        defer { try? FileManager.default.removeItem(at: archiveURL) }
+
+        let imported = try ThemeTransferService.importTheme(from: archiveURL)
+
+        XCTAssertEqual(imported.name, theme.name)
+        XCTAssertEqual(imported.palette, theme.palette)
+        XCTAssertFalse(imported.isBuiltIn)
+    }
+
     private func makeStore() -> ThemeStore {
         ThemeStore(storageDirectory: storageDirectory)
     }

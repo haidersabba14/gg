@@ -90,10 +90,6 @@ struct ThemeTransferView: View {
     }
 
     private func prepareZIP() {
-        guard #available(iOS 16.0, *) else {
-            statusMessage = "ZIP packages require iOS 16 or later."
-            return
-        }
         isPreparing = true
         do {
             shareURL = try ThemeTransferService.exportThemeZIP(store.activeTheme)

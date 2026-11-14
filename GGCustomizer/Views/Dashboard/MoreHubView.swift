@@ -20,6 +20,9 @@ struct MoreHubView: View {
                 NavigationLink { ThemeTransferView() } label: {
                     MoreRow(title: "Theme Files", subtitle: "Share JSON and ZIP packages through iOS", symbol: "square.and.arrow.up.on.square")
                 }
+                NavigationLink { VerifiedIntegrationsCenterView() } label: {
+                    MoreRow(title: "Verified Integrations", subtitle: "Reviewed, file-based integrations only", symbol: "checkmark.shield")
+                }
             }
 
             Section("System integrations") {
