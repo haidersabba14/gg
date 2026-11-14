@@ -34,7 +34,7 @@ jobs:
           -project GGCustomizer.xcodeproj
           -scheme GGCustomizer
           -sdk iphonesimulator
-          -destination 'platform=iOS Simulator,name=iPhone 16 Pro,OS=latest'
+          -destination 'platform=iOS Simulator,name=iPhone 16 Pro,OS=latest,arch=arm64'
           clean test
           CODE_SIGNING_ALLOWED=NO
 
@@ -45,6 +45,6 @@ jobs:
           -scheme GGCustomizer
           -configuration Release
           -sdk iphonesimulator
-          -destination 'platform=iOS Simulator,name=iPhone 16 Pro,OS=latest'
+          -destination 'platform=iOS Simulator,name=iPhone 16 Pro,OS=latest,arch=arm64'
           clean build
           CODE_SIGNING_ALLOWED=NO
