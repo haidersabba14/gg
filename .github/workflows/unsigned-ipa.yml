@@ -1,0 +1,67 @@
+name: Unsigned IPA
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Existing GitHub Release to receive the clearly-labelled unsigned artifact
+        required: true
+        default: v1.0.0
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build unsigned IPA (not installable)
+    runs-on: macos-15
+    timeout-minutes: 30
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Archive without signing
+        run: >-
+          xcodebuild
+          -project GGCustomizer.xcodeproj
+          -scheme GGCustomizer
+          -configuration Release
+          -sdk iphoneos
+          -destination 'generic/platform=iOS'
+          -archivePath "$RUNNER_TEMP/GGCustomizer-unsigned.xcarchive"
+          clean archive
+          CODE_SIGNING_ALLOWED=NO
+          CODE_SIGNING_REQUIRED=NO
+
+      - name: Package unsigned IPA
+        run: |
+          APP_PATH="$RUNNER_TEMP/GGCustomizer-unsigned.xcarchive/Products/Applications/GGCustomizer.app"
+          IPA_ROOT="$RUNNER_TEMP/unsigned-ipa"
+          IPA_PATH="$RUNNER_TEMP/GGCustomizer-unsigned-not-installable.ipa"
+          test -d "$APP_PATH"
+          mkdir -p "$IPA_ROOT/Payload"
+          ditto "$APP_PATH" "$IPA_ROOT/Payload/GGCustomizer.app"
+          (
+            cd "$IPA_ROOT"
+            ditto -c -k --sequesterRsrc --keepParent Payload "$IPA_PATH"
+          )
+          test -f "$IPA_PATH"
+
+      - name: Upload unsigned IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: GGCustomizer-unsigned-not-installable
+          path: ${{ runner.temp }}/GGCustomizer-unsigned-not-installable.ipa
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Attach unsigned IPA to release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ inputs.release_tag }}
+        run: >-
+          gh release upload "$RELEASE_TAG"
+          "$RUNNER_TEMP/GGCustomizer-unsigned-not-installable.ipa#GGCustomizer-unsigned-not-installable.ipa"
+          --repo "$GITHUB_REPOSITORY"
+          --clobber
