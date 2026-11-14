@@ -49,15 +49,20 @@ jobs:
 
       - name: Validate signing secrets
         run: |
-          test -n "$BUILD_CERTIFICATE_BASE64"
-          test -n "$P12_PASSWORD"
+          missing=()
+          for secret_name in BUILD_CERTIFICATE_BASE64 P12_PASSWORD KEYCHAIN_PASSWORD TEAM_ID EXPORT_OPTIONS_PLIST_BASE64; do
+            if [ -z "${!secret_name:-}" ]; then
+              missing+=("$secret_name")
+            fi
+          done
           if [ -z "$PROVISIONING_PROFILE_BASE64" ] && [ -z "$PROVISIONING_PROFILES_ZIP_BASE64" ]; then
-            echo "Provide PROVISIONING_PROFILE_BASE64 or PROVISIONING_PROFILES_ZIP_BASE64." >&2
+            missing+=("PROVISIONING_PROFILE_BASE64 or PROVISIONING_PROFILES_ZIP_BASE64")
+          fi
+          if [ "${#missing[@]}" -gt 0 ]; then
+            echo "Missing signing secret name(s):" >&2
+            printf ' - %s\n' "${missing[@]}" >&2
             exit 1
           fi
-          test -n "$KEYCHAIN_PASSWORD"
-          test -n "$TEAM_ID"
-          test -n "$EXPORT_OPTIONS_PLIST_BASE64"
 
       - name: Install temporary signing material
         id: signing
