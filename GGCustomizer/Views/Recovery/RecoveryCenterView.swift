@@ -137,7 +137,7 @@ struct RecoveryCenterView: View {
 
                 Toggle(isOn: Binding(
                     get: { store.settings.safeModeEnabled },
-                    set: { store.setSafeMode($0); haptic(.selection) }
+                    set: { store.setSafeMode($0); selectionHaptic() }
                 )) {
                     Label("Emergency Safe Mode", systemImage: "shield.fill")
                 }
@@ -224,10 +224,10 @@ struct RecoveryCenterView: View {
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                 } else {
-                    ForEach(store.backups.prefix(5)) { backup in
+                    ForEach(visibleBackups) { backup in
                         Button {
                             backupToRestore = backup
-                            haptic(.selection)
+                            selectionHaptic()
                         } label: {
                             HStack(alignment: .firstTextBaseline, spacing: 10) {
                                 Image(systemName: "archivebox")
@@ -244,7 +244,7 @@ struct RecoveryCenterView: View {
                             .contentShape(Rectangle())
                         }
                         .buttonStyle(.plain)
-                        if backup.id != store.backups.prefix(5).last?.id { Divider() }
+                        if backup.id != visibleBackups.last?.id { Divider() }
                     }
                 }
             }
@@ -301,6 +301,14 @@ struct RecoveryCenterView: View {
 
     private func haptic(_ type: UINotificationFeedbackGenerator.FeedbackType) {
         HapticService.notification(type, enabled: store.settings.hapticsEnabled)
+    }
+
+    private func selectionHaptic() {
+        HapticService.selection(enabled: store.settings.hapticsEnabled)
+    }
+
+    private var visibleBackups: [ThemeBackup] {
+        Array(store.backups.prefix(5))
     }
 
     private func exportNewestBackup() {
