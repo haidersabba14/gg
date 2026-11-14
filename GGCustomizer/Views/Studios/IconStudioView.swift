@@ -7,8 +7,8 @@ import UIKit
 struct IconStudioView: View {
     @State private var sourceImage: UIImage?
     @State private var iconScale = 0.88
-    @State private var shape: IconShape = .rounded
-    @State private var effect: IconEffect = .glass
+    @State private var shape: IconStudioShape = .rounded
+    @State private var effect: IconStudioEffect = .glass
     @State private var drawingEnabled = false
     @State private var strokes: [IconStroke] = []
     @State private var selectedInk = Color.white
@@ -76,7 +76,7 @@ struct IconStudioView: View {
                     .frame(height: 245)
                     .accessibilityLabel("Icon artwork preview")
                 HStack(spacing: 8) {
-                    ForEach(IconShape.allCases) { candidate in
+                    ForEach(IconStudioShape.allCases) { candidate in
                         Button {
                             shape = candidate
                             RoyalHaptics.selection()
@@ -123,7 +123,7 @@ struct IconStudioView: View {
                     Slider(value: $iconScale, in: 0.45...1.15, step: 0.01).tint(RoyalPalette.gold)
                 }
                 Picker("Signature effect", selection: $effect) {
-                    ForEach(IconEffect.allCases) { option in Label(option.title, systemImage: option.symbol).tag(option) }
+                    ForEach(IconStudioEffect.allCases) { option in Label(option.title, systemImage: option.symbol).tag(option) }
                 }
                 .pickerStyle(.menu)
 
@@ -234,7 +234,7 @@ struct IconStudioView: View {
 
 private struct IconArtworkPreview: View {
     let image: UIImage?
-    let shape: IconShape
+    let shape: IconStudioShape
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 34, style: .continuous).fill(.black.opacity(0.22))
@@ -251,7 +251,7 @@ private struct IconArtworkPreview: View {
     }
 }
 
-private enum IconShape: String, CaseIterable, Identifiable {
+private enum IconStudioShape: String, CaseIterable, Identifiable {
     case rounded, circle, square
     var id: String { rawValue }
     var title: String { rawValue.capitalized }
@@ -265,7 +265,7 @@ private enum IconShape: String, CaseIterable, Identifiable {
     }
 }
 
-private enum IconEffect: String, CaseIterable, Identifiable {
+private enum IconStudioEffect: String, CaseIterable, Identifiable {
     case none, glass, gold, neon, dimensional
     var id: String { rawValue }
     var title: String { rawValue.capitalized }
@@ -311,7 +311,7 @@ private struct IconDrawingCanvas: View {
 }
 
 private enum IconArtworkRenderer {
-    static func render(source: UIImage?, scale: Double, shape: IconShape, effect: IconEffect, strokes: [IconStroke]) -> UIImage? {
+    static func render(source: UIImage?, scale: Double, shape: IconStudioShape, effect: IconStudioEffect, strokes: [IconStroke]) -> UIImage? {
         guard let source else { return nil }
         let size = CGSize(width: 1024, height: 1024)
         let format = UIGraphicsImageRendererFormat.default(); format.opaque = false
@@ -325,10 +325,10 @@ private enum IconArtworkRenderer {
             drawEffect(effect, in: iconRect, context: context); drawStrokes(strokes, size: size, context: context); context.restoreGState()
         }
     }
-    private static func applyClip(shape: IconShape, rect: CGRect, context: CGContext) {
+    private static func applyClip(shape: IconStudioShape, rect: CGRect, context: CGContext) {
         switch shape { case .rounded: context.addPath(UIBezierPath(roundedRect: rect, cornerRadius: 205).cgPath); case .circle: context.addEllipse(in: rect); case .square: context.addRect(rect) }; context.clip()
     }
-    private static func drawEffect(_ effect: IconEffect, in rect: CGRect, context: CGContext) {
+    private static func drawEffect(_ effect: IconStudioEffect, in rect: CGRect, context: CGContext) {
         switch effect {
         case .none: break
         case .glass:

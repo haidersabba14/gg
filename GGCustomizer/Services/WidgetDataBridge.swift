@@ -16,14 +16,34 @@ struct WidgetThemeSnapshot: Codable, Hashable, Sendable {
     var textHex: String
     var updatedAt: Date
 
+    init(
+        themeName: String,
+        primaryHex: String,
+        secondaryHex: String,
+        accentHex: String,
+        backgroundHex: String,
+        textHex: String,
+        updatedAt: Date
+    ) {
+        self.themeName = themeName
+        self.primaryHex = primaryHex
+        self.secondaryHex = secondaryHex
+        self.accentHex = accentHex
+        self.backgroundHex = backgroundHex
+        self.textHex = textHex
+        self.updatedAt = updatedAt
+    }
+
     init(theme: ThemePackage) {
-        themeName = theme.name
-        primaryHex = theme.palette.primary
-        secondaryHex = theme.palette.secondary
-        accentHex = theme.palette.accent
-        backgroundHex = theme.palette.background
-        textHex = theme.palette.text
-        updatedAt = .now
+        self.init(
+            themeName: theme.name,
+            primaryHex: theme.palette.primary,
+            secondaryHex: theme.palette.secondary,
+            accentHex: theme.palette.accent,
+            backgroundHex: theme.palette.background,
+            textHex: theme.palette.text,
+            updatedAt: .now
+        )
     }
 
     static let preview = WidgetThemeSnapshot(
