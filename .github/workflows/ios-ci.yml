@@ -29,26 +29,41 @@ jobs:
         run: xcrun simctl list devices available
 
       - name: Run unit tests without signing
-        run: >-
-          xcodebuild
-          -project GGCustomizer.xcodeproj
-          -scheme GGCustomizer
-          -sdk iphonesimulator
-          -destination 'platform=iOS Simulator,name=iPhone 16 Pro,OS=latest,arch=arm64'
-          clean test
-          CODE_SIGNING_ALLOWED=NO
-          ARCHS=arm64
-          ONLY_ACTIVE_ARCH=YES
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project GGCustomizer.xcodeproj \
+            -scheme GGCustomizer \
+            -sdk iphonesimulator \
+            -destination 'platform=iOS Simulator,name=iPhone 16 Pro,OS=latest,arch=arm64' \
+            clean test \
+            CODE_SIGNING_ALLOWED=NO \
+            ARCHS=arm64 \
+            ONLY_ACTIVE_ARCH=YES 2>&1 | tee "$RUNNER_TEMP/xcodebuild-test.log"
 
       - name: Verify release simulator build without signing
-        run: >-
-          xcodebuild
-          -project GGCustomizer.xcodeproj
-          -scheme GGCustomizer
-          -configuration Release
-          -sdk iphonesimulator
-          -destination 'platform=iOS Simulator,name=iPhone 16 Pro,OS=latest,arch=arm64'
-          clean build
-          CODE_SIGNING_ALLOWED=NO
-          ARCHS=arm64
-          ONLY_ACTIVE_ARCH=YES
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project GGCustomizer.xcodeproj \
+            -scheme GGCustomizer \
+            -configuration Release \
+            -sdk iphonesimulator \
+            -destination 'platform=iOS Simulator,name=iPhone 16 Pro,OS=latest,arch=arm64' \
+            clean build \
+            CODE_SIGNING_ALLOWED=NO \
+            ARCHS=arm64 \
+            ONLY_ACTIVE_ARCH=YES 2>&1 | tee "$RUNNER_TEMP/xcodebuild-release.log"
+
+      - name: Report Xcode failure context
+        if: failure()
+        run: |
+          for log in "$RUNNER_TEMP/xcodebuild-test.log" "$RUNNER_TEMP/xcodebuild-release.log"; do
+            [ -f "$log" ] || continue
+            while IFS= read -r line; do
+              safe_line="${line//'%'/'%25'}"
+              safe_line="${safe_line//$'\r'/'%0D'}"
+              safe_line="${safe_line//$'\n'/'%0A'}"
+              echo "::error::$safe_line"
+            done < <(grep -Ei 'error:|fatal error:|testing failed|\*\* (test|build) failed' "$log" | tail -n 20 || true)
+          done
